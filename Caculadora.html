@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora con Historial</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .calculator {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .calculator input, .calculator button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    .operations {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .operations button {
+      width: 23%;
+    }
+
+    #history {
+      font-size: 16px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="number" id="num1" placeholder="Número 1">
+    <input type="number" id="num2" placeholder="Número 2">
+    <div class="operations">
+      <button onclick="calculate('+')">+</button>
+      <button onclick="calculate('-')">-</button>
+      <button onclick="calculate('*')">*</button>
+      <button onclick="calculate('/')">/</button>
+    </div>
+    <button onclick="clearHistory()">Borrar historial</button>
+    <div id="history"></div>
+  </div>
+  <script>
+    function calculate(operation) {
+      var num1 = parseFloat(document.getElementById('num1').value);
+      var num2 = parseFloat(document.getElementById('num2').value);
+      var result;
+
+      switch (operation) {
+        case '+':
+          result = num1 + num2;
+          break;
+        case '-':
+          result = num1 - num2;
+          break;
+        case '*':
+          result = num1 * num2;
+          break;
+        case '/':
+          result = num1 / num2;
+          break;
+      }
+
+      var historyElement = document.getElementById('history');
+      var historyText = localStorage.getItem('calc_history');
+      if (!historyText) {
+        historyText = '';
+      }
+      historyText += num1 + ' ' + operation + ' ' + num2 + ' = ' + result + '\n';
+      localStorage.setItem('calc_history', historyText);
+      historyElement.textContent = historyText;
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('calc_history');
+      document.getElementById('history').textContent = '';
+    }
+
+    (function() {
+      var historyText = localStorage.getItem('calc_history');
+      if (historyText) {
+        document.getElementById('history').textContent = historyText;
+      }
+    })();
+  </script>
+</body>
+</html>
